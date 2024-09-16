@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define pb push_back
+const int N=1e5;
+vector<int>adj[N+10];
+vector<bool>vis(N+10);
+vector<int>tin(N+10),low(N+10);
+vector<pair<int,int>>bridge;
+int timer;
+void dfs(int v ,int p=-1){
+  vis[v] = true;
+    tin[v] = low[v] = timer++;
+    bool parent_skipped = false;
+    for (int to : adj[v]) {
+        if (to == p && !parent_skipped) {
+            parent_skipped = true;
+            continue;
+        }
+        if (vis[to]) {
+            low[v] = min(low[v], tin[to]);
+        } else {
+            dfs(to, v);
+            low[v] = min(low[v], low[to]);
+            if (low[to] > tin[v])
+                bridge.pb({v, to});
+        }
+    }
+}
+
+signed main()
+{
+  int n,m;
+   cin>>n>>m;
+   for(int i=0;i<m;i++){
+    int a,b;
+    cin>>a>>b;
+    adj[a].pb(b);
+    adj[b].pb(a);
+   }
+   timer=0;
+   for(int i=1;i<=n;i++){
+    if(!vis[i])dfs(i);
+   }
+   for(auto it:bridge)cout<<it.first<<"  "<<it.second<<endl;
+}
+
