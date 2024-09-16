@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define pb push_back
+const int N=1e5;
+vector<int>adj[N+10];
+vector<int>v,in(N+10);
+int timer;
+void khan(int n){
+    queue<int>q;
+    for(int i=1;i<=n;i++)if(in[i]==0)q.push(i);
+    while(!q.empty()){
+        int u=q.front();
+        v.pb(u);
+        q.pop();
+        for(auto it:adj[u]){
+            in[it]--;
+            if(in[it]==0)q.push(it);
+        }
+    }
+    for(auto it:v)cout<<it<<"  ";
+}
+signed main()
+{
+  int n,m;
+   cin>>n>>m;
+   for(int i=1;i<=n;i++)in[i]=0;
+   for(int i=0;i<m;i++){
+    int a,b;
+    cin>>a>>b;
+    adj[a].pb(b);
+    in[b]++;
+   }
+   khan(n);
+}
+
